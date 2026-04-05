@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Modal, Input, Select, Button, message } from 'antd';
-import {
-  WarningOutlined,
-  CheckOutlined,
-} from '@ant-design/icons';
+import { IoIosWarning } from "react-icons/io";
+import { FaCircleCheck } from "react-icons/fa6";
+
 import {
   useCreateDepositMutation,
-  useWithdrawMutation,
-  useWithdrawConfirmMutation,
+  useInitiateWithdrawMutation,
+  useConfirmWithdrawMutation,
 } from '../../store/api';
 
 import './index.css';
@@ -138,7 +137,7 @@ export default function WalletModal({
          <div style={{position:"relative", height:320}}><Loader/></div>
       }
       {type === 'deposit' && depositError && 
-         <div style={{position:"relative", height:320}}><WarningOutlined className='failed'/></div>
+         <div style={{position:"relative", height:320}}><IoIosWarning className='failed'/></div>
       }
       {type === 'deposit' && deposit && (
         <>
@@ -162,7 +161,7 @@ export default function WalletModal({
                   <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                 </svg>
               }
-              {copyClicked && <CheckOutlined style={{color:'green'}}/>}
+              {copyClicked && <FaCircleCheck style={{color:'green'}}/>}
             </Button>
           </div>
 

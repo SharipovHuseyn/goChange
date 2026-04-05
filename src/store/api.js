@@ -254,7 +254,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { showErrors } from "../components/utils.component";
 
-// Всегда используем production API
 const baseUrl = 'https://api.gochange.tech';
 
 console.log('baseUrl ->', baseUrl, '[production]');
@@ -320,7 +319,7 @@ const req = async (url, opt = {}) => {
   
   const shouldShowError = !skipErrorUrls.some(skipUrl => url.includes(skipUrl));
   
-  if (shouldShowError) {
+  if (shouldShowError && err) {
     showErrors(err);
   }
   
@@ -550,9 +549,8 @@ export const api = createApi({
     submitKYC: builder.mutation({
       queryFn: async (formData) => {
         // Для multipart/form-data используем специальную обработку
-        const res = await fetch(baseUrl + '/kyc/submit/', {
+        const res = await csrfFetch(baseUrl + '/kyc/submit/', {
           method: "POST",
-          credentials: 'include',
           body: formData,
         });
         

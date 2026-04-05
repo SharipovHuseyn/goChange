@@ -8,18 +8,17 @@ import {
   WarningOutlined,
 } from '@ant-design/icons';
 import {
-  useWalletsQuery,
-  useExchangePairsQuery,
-  useExchangeValidateMutation,
-  useExchangeMaxAmountQuery,
-  useExchangeHistoryQuery,
-  useExchangeMutation,
+  useGetWalletsQuery,
+  useGetExchangeDirectionsQuery,
+  useValidateExchangeQuery,
+  useGetExchangeMaxAmountQuery,
+  useGetExchangeHistoryQuery,
+  useCreateExchangeMutation,
 } from '../../store/api';
 import WalletModal from '../../widget/WalletModal';
 import WaitFor from '../../components/WaitFor';
 import Loader from '../../components/Loader';
 import { coin2name, useDebounce } from '../../components/utils.component';
-
 
 const precision = 8;
 
@@ -36,42 +35,62 @@ function PageExchange() {
   const [amount, setAmount] = useState("0");
   const debouncedAmount = useDebounce(amount);
 
-  const [exchangeValidate, { data: exchangeValidateData, isLoading: exchangeValidateLoading }] = useExchangeValidateMutation();
-  const recieveAmount = useMemo(() => {
-    return (exchangeValidateData?.receive_amount ? exchangeValidateData.receive_amount : " ")
+  // Используем validateExchange как query (GET запрос)
+  const { 
+    data: exchangeValidateData, 
+    isLoading: exchangeValidateLoading,
+    refetch: validateRefetch 
+  } = useValidateExchangeQuery(
+    { 
+      exchange_pair: exchangePairId, 
+      amount: debouncedAmount,
+      calc_action: "send"
+    },
+    { skip: !exchangePairId || !debouncedAmount || Number(debouncedAmount) <= 0 }
+  );
+  
+  const receiveAmount = useMemo(() => {
+    return exchangeValidateData?.receive_amount ? exchangeValidateData.receive_amount : " "
   }, [exchangeValidateData]);
 
-  const [exchange, { data: exchangeData, isLoading: exchangeLoading }] = useExchangeMutation();
+  // Используем createExchange mutation
+  const [createExchange, { data: exchangeData, isLoading: exchangeLoading }] = useCreateExchangeMutation();
 
-  const exchangePairsProvider = useExchangePairsQuery(
+  // Получаем направления обмена (exchange directions)
+  const exchangeDirectionsProvider = useGetExchangeDirectionsQuery(
     { from_coin: fromCoin },
     { skip: !fromCoin }
   );
+  
   const {
-    data: exchangePairsOriginalData,
-    isError: exchangePairsError,
-    isLoading: exchangePairsLoading,
-    isFetching: exchangePairsFetching,
-    refetch: exchangePairsRefetch,
-  } = exchangePairsProvider;
-  const exchangePairsData = useMemo(() => {
-    return (exchangePairsProvider.data || []).filter(e => e.available)
-  }, [exchangePairsOriginalData])
+    data: exchangeDirectionsOriginalData,
+    isError: exchangeDirectionsError,
+    isLoading: exchangeDirectionsLoading,
+    isFetching: exchangeDirectionsFetching,
+    refetch: exchangeDirectionsRefetch,
+  } = exchangeDirectionsProvider;
+  
+  const exchangeDirectionsData = useMemo(() => {
+    return (exchangeDirectionsOriginalData || []).filter(e => e.available)
+  }, [exchangeDirectionsOriginalData]);
+  
   const exchangePairId = useMemo(() => {
-    return (exchangePairsOriginalData || [])
+    return (exchangeDirectionsOriginalData || [])
       .filter(e => e.available && e.to_coin_code === toCoin)[0]?.id;
-  }, [exchangePairsOriginalData, toCoin]);
+  }, [exchangeDirectionsOriginalData, toCoin]);
 
+  // Получаем максимальную сумму обмена
   const {
     data: exchangeMaxAmountData,
     isError: exchangeMaxAmountIsError,
     isLoading: exchangeMaxAmountIsLoading,
     isFetching: exchangeMaxAmountIsFetching,
-  } = useExchangeMaxAmountQuery(
+  } = useGetExchangeMaxAmountQuery(
     { exchange_pair: exchangePairId },
     { skip: !exchangePairId }
   );
-  const maxAmount = exchangeMaxAmountData?.max_send_amount;
+  
+  const maxAmount = exchangeMaxAmountData?.amount;
   const canShowSetMaxAmountButton =
     exchangePairId &&
     exchangeMaxAmountData &&
@@ -79,9 +98,11 @@ function PageExchange() {
     !exchangeMaxAmountIsLoading &&
     !exchangeMaxAmountIsFetching;
 
-  const walletsProvider = useWalletsQuery();
+  // Получаем кошельки
+  const walletsProvider = useGetWalletsQuery();
   const { data: walletsData } = walletsProvider;
 
+  // Опции для выбора валюты отправления
   const fromCoinListOptions = useMemo(() => {
     return [{ coin: "RUB" }].concat(walletsData || []).map(w => {
       const n = coin2name(w.coin, { style: { height: 22, position: "relative", top: 5, marginRight: 5 } })
@@ -101,12 +122,13 @@ function PageExchange() {
     })
   }, [walletsData])
 
+  // Опции для выбора валюты получения
   const toCoinListOptions = useMemo(() => {
-    return (exchangePairsLoading || exchangePairsFetching)
+    return (exchangeDirectionsLoading || exchangeDirectionsFetching)
       ? [{ label: <Loader type="small" />, disabled: true }]
-      : exchangePairsError
+      : exchangeDirectionsError
         ? [{ label: <WarningOutlined style={{ color: 'red' }} />, disabled: true }]
-        : exchangePairsData.map(w => {
+        : exchangeDirectionsData.map(w => {
           const n = coin2name(w.to_coin_code, {
             style: { height: 22, position: "relative", top: 5, marginRight: 5 }
           })
@@ -125,16 +147,18 @@ function PageExchange() {
             ),
           }
         })
-  }, [exchangePairsOriginalData, exchangePairsError, exchangePairsLoading, exchangePairsFetching])
+  }, [exchangeDirectionsOriginalData, exchangeDirectionsError, exchangeDirectionsLoading, exchangeDirectionsFetching])
 
+  // Получаем историю обменов
   const {
     data: exchangeHistoryData,
     isLoading: exchangeHistoryLoading,
     isError: exchangeHistoryError,
     isFetching: exchangeHistoryFetching,
-  } = useExchangeHistoryQuery({
+  } = useGetExchangeHistoryQuery({
     page_size: 20,
   });
+  
   const exchangeDataSource = (exchangeHistoryData?.results || []).map((ex) => ({
     key: ex.id,
     datetime: ex.created_at,
@@ -144,6 +168,7 @@ function PageExchange() {
     receive_currency: ex.receive_currency,
     status: ex.status,
   }));
+  
   const exchangeColumns = [
     {
       title: 'Date',
@@ -230,22 +255,14 @@ function PageExchange() {
     },
   ];
 
+  // Устанавливаем toCoin по умолчанию
   useEffect(() => {
-    if (!exchangePairId || !amount || Number(amount) <= 0) return;
+    if (!toCoin && toCoinListOptions.length > 0 && toCoinListOptions[0]?.value) {
+      setToCoin(toCoinListOptions[0].value);
+    }
+  }, [toCoinListOptions, toCoin]);
 
-    exchangeValidate({
-      exchange_pair: exchangePairId,
-      amount,
-      calc_action: "send"
-    });
-
-  }, [exchangePairId, debouncedAmount])
-
-  useEffect(() => {
-    if (!toCoin && toCoinListOptions.length > 0) setToCoin(toCoinListOptions[0].value)
-  }, [toCoinListOptions])
-
-
+  // Обработка успешного обмена
   useEffect(() => {
     if (exchangeData) {
       setAmount("");
@@ -266,12 +283,12 @@ function PageExchange() {
         duration: 0
       });
     }
-  }, [exchangeData])
+  }, [exchangeData, api, navigate]);
 
   const onChangeFromCoinHandler = value => {
     setFromCoin(value)
     setToCoin(undefined)
-    exchangePairsRefetch();
+    exchangeDirectionsRefetch();
   }
 
   const onChangeToCoinHandler = value => {
@@ -281,7 +298,7 @@ function PageExchange() {
   const onSwapFromCoinAndToCoinHandler = () => {
     setFromCoin(toCoin);
     setToCoin(fromCoin);
-    exchangePairsRefetch();
+    exchangeDirectionsRefetch();
   }
 
   const onChangeAmountHandler = e => {
@@ -299,17 +316,27 @@ function PageExchange() {
   }
 
   const onClickExchangeHandler = () => {
-    exchange({
+    if (!exchangePairId || !amount || Number(amount) <= 0) {
+      api.warning({
+        message: 'Ошибка',
+        description: 'Пожалуйста, заполните все поля корректно',
+      });
+      return;
+    }
+    
+    createExchange({
       exchange_pair: exchangePairId,
-      amount,
+      amount: amount,
       calc_action: "send"
     });
   }
 
-
   return (
     <div style={{ paddingLeft: 12, minWidth: 350 }} id="exchange">
-      <div style={{ paddingLeft: 0, fontSize: 22, fontWeight: 400, borderBottom: '1px solid rgba(173, 173, 173, 0.3)', paddingBottom: 7 }}>{t("pageExchange_Exchange")}</div>
+      <div style={{ paddingLeft: 0, fontSize: 22, fontWeight: 400, borderBottom: '1px solid rgba(173, 173, 173, 0.3)', paddingBottom: 7 }}>
+        {t("pageExchange_Exchange")}
+      </div>
+      
       <WaitFor
         providers={[walletsProvider]}
         errorMessage={<WarningOutlined className="failed" />}
@@ -317,81 +344,90 @@ function PageExchange() {
         <div style={{ position: "relative", marginTop: 16, borderRadius: 5, backgroundColor: "#fff", overflow: 'hidden', paddingLeft: 20, paddingRight: 20 }}>
           <div className="swapContainer">
             <div>
-          <div style={{ marginTop: 35 }}>{t("pageExchange_YoureSpending")}</div>
-          <div className='inputWithCoin'>
-            <Input id="in" className='inputWithCoin-input' value={amount} onChange={onChangeAmountHandler} />
-            <Select
-              className='inputWithCoin-select'
-              value={fromCoin}
-              onChange={onChangeFromCoinHandler}
-              options={fromCoinListOptions}
-            />
-          </div>
-          </div>
-
-          <div style={{ position: "relative", height: 70 }}>
-            {canShowSetMaxAmountButton &&
-              <div className="fromCoin-message-change">{t('pageExchange_You_can_exchange_a_maximum_of')} <span style={{ color: "#4c47fc", fontWeight: 800 }}>{maxAmount}</span>&nbsp;{fromCoin} &nbsp;
-                <Button size="small" style={{ fontSize: 10 }} onClick={onClickSetMaximumAmount}>{t('pageExchange_Set_Max_Amount')}</Button>
+              <div style={{ marginTop: 35 }}>{t("pageExchange_YoureSpending")}</div>
+              <div className='inputWithCoin'>
+                <Input 
+                  id="in" 
+                  className='inputWithCoin-input' 
+                  value={amount} 
+                  onChange={onChangeAmountHandler} 
+                />
+                <Select
+                  className='inputWithCoin-select'
+                  value={fromCoin}
+                  onChange={onChangeFromCoinHandler}
+                  options={fromCoinListOptions}
+                />
               </div>
-            }
-            {/*<svg style={{position:"absolute", left:10, top:-1}} width="16" height="45" viewBox="0 0 16 50" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 0V44H11.5" stroke="#E6E6E6"/><circle cx="12" cy="44" r="4" fill="#E6E6E6"/></svg>
-        <div className="fromCoin-message-first">
-          <span style={{color:"#4c47fc"}}>Все комиссии включены</span>
-        </div>
-        <svg style={{position:"absolute", left:10, top:24}} width="16" height="45" viewBox="0 0 16 50" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 0V44H11.5" stroke="#E6E6E6"/><circle cx="12" cy="44" r="4" fill="#E6E6E6"/></svg>
-        <div className="fromCoin-message-second">
-          <span style={{color:"#4c47fc"}}>Расчетный курс:</span>&nbsp;
-          123
-        </div>*/}
-          </div>
+            </div>
 
-          <Button
-            className="swapButton"
-            onClick={onSwapFromCoinAndToCoinHandler}
-          >
-            <svg height="16" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0.774414 7.74588L4.64749 3.8728L8.52057 7.74588" stroke="#00C26F" stroke-width="1.54923" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M9.29515 20.9143H6.19669C5.78581 20.9143 5.39176 20.7511 5.10122 20.4606C4.81068 20.17 4.64746 19.776 4.64746 19.3651V3.8728M20.9144 13.9428L17.0413 17.8159L13.1682 13.9428" stroke="#00C26F" stroke-width="1.54923" stroke-linecap="round" stroke-linejoin="round" />
-              <path d="M12.3936 0.774658H15.492C15.9029 0.774658 16.297 0.93788 16.5875 1.22842C16.878 1.51895 17.0412 1.91301 17.0412 2.32389V17.8162" stroke="#00C26F" stroke-width="1.54923" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </Button>
-              <div>
-          <div style={{ marginTop: 20 }}>{t("pageExchange_YouWillReceive")}</div>
-          <div className='inputWithCoin'>
-            <Input id="out" className="inputWithCoin-input" value={recieveAmount} disabled />
-            {exchangeValidateLoading && <Loader type="small" className="amountLoader" />}
-
-            <Select
-              value={toCoin}
-              onChange={onChangeToCoinHandler}
-              className="inputWithCoin-select"
-              options={toCoinListOptions}
-              disabled={toCoinListOptions.length === 0}
-            />
-            {(exchangePairsLoading || exchangePairsFetching) &&
-              <Loader type="small" centered={false} style={{ position: "absolute", bottom: 15, right: 75, zIndex: 1 }} />
-            }
-          </div>
-          </div>
-          <div style={{ position: "relative", height: 45, zIndex: 0 }}>
-            {(toCoinListOptions.length === 0) &&
-              <>
-                <svg style={{ position: "absolute", left: 10, top: -20 }} width="16" height="45" viewBox="0 0 16 50" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0.5 0V44H11.5" stroke="#E6E6E6" /><circle cx="12" cy="44" r="4" fill="#E6E6E6" /></svg>
-                <div style={{ fontSize: 10, position: "absolute", top: 12, left: 32 }}>
-                  <span style={{ color: "red" }}>{t('pageExchange_Impossible')}</span>
+            <div style={{ position: "relative", height: 70 }}>
+              {canShowSetMaxAmountButton &&
+                <div className="fromCoin-message-change">
+                  {t('pageExchange_You_can_exchange_a_maximum_of')} 
+                  <span style={{ color: "#4c47fc", fontWeight: 800 }}>{maxAmount}</span>&nbsp;{fromCoin} &nbsp;
+                  <Button size="small" style={{ fontSize: 10 }} onClick={onClickSetMaximumAmount}>
+                    {t('pageExchange_Set_Max_Amount')}
+                  </Button>
                 </div>
-              </>
-            }
-          </div>
-          </div>
+              }
+            </div>
 
+            <Button
+              className="swapButton"
+              onClick={onSwapFromCoinAndToCoinHandler}
+            >
+              <svg height="16" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0.774414 7.74588L4.64749 3.8728L8.52057 7.74588" stroke="#00C26F" strokeWidth="1.54923" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M9.29515 20.9143H6.19669C5.78581 20.9143 5.39176 20.7511 5.10122 20.4606C4.81068 20.17 4.64746 19.776 4.64746 19.3651V3.8728M20.9144 13.9428L17.0413 17.8159L13.1682 13.9428" stroke="#00C26F" strokeWidth="1.54923" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M12.3936 0.774658H15.492C15.9029 0.774658 16.297 0.93788 16.5875 1.22842C16.878 1.51895 17.0412 1.91301 17.0412 2.32389V17.8162" stroke="#00C26F" strokeWidth="1.54923" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </Button>
+            
+            <div>
+              <div style={{ marginTop: 20 }}>{t("pageExchange_YouWillReceive")}</div>
+              <div className='inputWithCoin'>
+                <Input 
+                  id="out" 
+                  className="inputWithCoin-input" 
+                  value={receiveAmount} 
+                  disabled 
+                />
+                {exchangeValidateLoading && <Loader type="small" className="amountLoader" />}
+
+                <Select
+                  value={toCoin}
+                  onChange={onChangeToCoinHandler}
+                  className="inputWithCoin-select"
+                  options={toCoinListOptions}
+                  disabled={toCoinListOptions.length === 0}
+                />
+                {(exchangeDirectionsLoading || exchangeDirectionsFetching) &&
+                  <Loader type="small" centered={false} style={{ position: "absolute", bottom: 15, right: 75, zIndex: 1 }} />
+                }
+              </div>
+            </div>
+            
+            <div style={{ position: "relative", height: 45, zIndex: 0 }}>
+              {(toCoinListOptions.length === 0) &&
+                <>
+                  <svg style={{ position: "absolute", left: 10, top: -20 }} width="16" height="45" viewBox="0 0 16 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.5 0V44H11.5" stroke="#E6E6E6" />
+                    <circle cx="12" cy="44" r="4" fill="#E6E6E6" />
+                  </svg>
+                  <div style={{ fontSize: 10, position: "absolute", top: 12, left: 32 }}>
+                    <span style={{ color: "red" }}>{t('pageExchange_Impossible')}</span>
+                  </div>
+                </>
+              }
+            </div>
+          </div>
 
           <div>
             <Button
               className="blueButton"
               style={{ width: '100%', borderRadius: 20 }}
-              disabled={(!exchangePairId) || exchangeLoading}
+              disabled={(!exchangePairId) || exchangeLoading || !amount || Number(amount) <= 0}
               loading={exchangeLoading}
               onClick={onClickExchangeHandler}
             >
@@ -400,11 +436,12 @@ function PageExchange() {
           </div>
 
           <div style={{ marginTop: 20, fontSize: 10 }}>{t("pageExchange_comment1")}</div>
-          <div style={{ marginBottom: 20, fontSize: 10 }}><b>{t("pageExchange_comment2")}</b> {t("pageExchange_comment3")}</div>
-
+          <div style={{ marginBottom: 20, fontSize: 10 }}>
+            <b>{t("pageExchange_comment2")}</b> {t("pageExchange_comment3")}
+          </div>
         </div>
-
       </WaitFor>
+      
       <div style={{
         marginTop: 30,
         borderRadius: 5,
@@ -435,7 +472,6 @@ function PageExchange() {
         wallets={walletsData}
       />
       {contextHolder}
-
     </div>
   )
 }
