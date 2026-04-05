@@ -251,6 +251,7 @@
 //   useExchangeMutation,
 //   useExchangeHistoryQuery,
 // } = api;
+
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { showErrors } from "../components/utils.component";
 
@@ -328,7 +329,7 @@ const req = async (url, opt = {}) => {
 
 export const api = createApi({
   reducerPath: 'api',
-  tagTypes: ['CurrentUser', 'Wallets', 'session', 'KYC', 'Settings', 'Exchange'],
+  tagTypes: ['CurrentUser', 'Wallets', 'Session', 'KYC', 'Settings', 'Exchange', 'Transactions'],
   endpoints: (builder) => ({
 
     /* ---------- AUTH ---------- */
@@ -353,14 +354,14 @@ export const api = createApi({
 
     // POST /auth/signin/resend-code/ - Signin resend code
     loginResendCode: builder.mutation({
-      queryFn: async (payload) => req('/auth/signin/resend-code/', { method: "POST", body: payload }),
+      queryFn: async () => req('/auth/signin/resend-code/', { method: "POST" }),
       invalidatesTags: ['CurrentUser'],
     }),
 
     // POST /auth/logout/ - Logout
     logout: builder.mutation({
       queryFn: async () => req('/auth/logout/', { method: "POST" }),
-      invalidatesTags: ['session', 'Wallets', 'CurrentUser'],
+      invalidatesTags: ['Session', 'Wallets', 'CurrentUser'],
     }),
 
     // POST /auth/signup/ - Sign up
@@ -377,7 +378,7 @@ export const api = createApi({
 
     // POST /auth/signup/resend-code/ - Signup resend code
     signupResendCode: builder.mutation({
-      queryFn: async (payload) => req('/auth/signup/resend-code/', { method: "POST", body: payload }),
+      queryFn: async () => req('/auth/signup/resend-code/', { method: "POST" }),
       invalidatesTags: ['CurrentUser'],
     }),
 
@@ -419,14 +420,14 @@ export const api = createApi({
     // GET /auth/settings/sessions/ - User sessions
     getSessions: builder.query({
       queryFn: async () => req('/auth/settings/sessions/'),
-      providesTags: ['session'],
+      providesTags: ['Session'],
       keepUnusedDataFor: 30,
     }),
 
     // DELETE /auth/settings/sessions/{session_key}/ - Delete user session
     terminateSession: builder.mutation({
       queryFn: async ({ session_key }) => req(`/auth/settings/sessions/${session_key}/`, { method: "DELETE" }),
-      invalidatesTags: ['session'],
+      invalidatesTags: ['Session'],
     }),
 
     /* ---------- WALLETS ---------- */
@@ -441,7 +442,7 @@ export const api = createApi({
     // GET /wallets/{coin}/ - Coin wallet
     getCoinWallet: builder.query({
       queryFn: async (coin) => req(`/wallets/${coin}/`),
-      providesTags: ['Wallets'],
+      providesTags: (result, error, coin) => [{ type: 'Wallets', id: coin }],
       keepUnusedDataFor: 30,
     }),
 
@@ -460,7 +461,7 @@ export const api = createApi({
     // POST /wallets/withdraw/confirm/ - Confirm withdrawal
     confirmWithdraw: builder.mutation({
       queryFn: async ({ code }) => req('/wallets/withdraw/confirm/', { method: "POST", body: { code } }),
-      invalidatesTags: ['Wallets'],
+      invalidatesTags: ['Wallets', 'Transactions'],
     }),
 
     // GET /wallets/transactions/ - List transactions
@@ -469,20 +470,23 @@ export const api = createApi({
         const search = new URLSearchParams(params).toString();
         return req(`/wallets/transactions/?${search}`);
       },
-      providesTags: ['Wallets'],
+      providesTags: (result) => 
+        result?.results 
+          ? [...result.results.map(({ id }) => ({ type: 'Transactions', id })), { type: 'Transactions', id: 'LIST' }]
+          : [{ type: 'Transactions', id: 'LIST' }],
       keepUnusedDataFor: 30,
     }),
 
     // POST /wallets/refund/ - Initiate refund
     initiateRefund: builder.mutation({
       queryFn: async ({ transaction_id, address }) => req('/wallets/refund/', { method: "POST", body: { transaction_id, address } }),
-      invalidatesTags: ['Wallets'],
+      invalidatesTags: ['Wallets', 'Transactions'],
     }),
 
     // POST /wallets/refund/confirm/ - Confirm refund
     confirmRefund: builder.mutation({
       queryFn: async ({ code }) => req('/wallets/refund/confirm/', { method: "POST", body: { code } }),
-      invalidatesTags: ['Wallets'],
+      invalidatesTags: ['Wallets', 'Transactions'],
     }),
 
     /* ---------- EXCHANGE ---------- */
@@ -524,7 +528,7 @@ export const api = createApi({
           body: { exchange_pair, amount, calc_action }
         });
       },
-      invalidatesTags: ['Wallets', 'Exchange'],
+      invalidatesTags: ['Wallets', 'Exchange', 'Transactions'],
     }),
 
     // GET /exchange/history/ - List exchanges (history)
@@ -533,7 +537,10 @@ export const api = createApi({
         const qs = new URLSearchParams(params).toString();
         return req(`/exchange/history/?${qs}`);
       },
-      providesTags: ['Exchange'],
+      providesTags: (result) => 
+        result?.results 
+          ? [...result.results.map(({ id }) => ({ type: 'Exchange', id })), { type: 'Exchange', id: 'HISTORY' }]
+          : [{ type: 'Exchange', id: 'HISTORY' }],
       keepUnusedDataFor: 30,
     }),
 
