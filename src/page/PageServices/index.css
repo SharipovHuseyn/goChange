@@ -1,0 +1,192 @@
+.head-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 50px;
+}
+
+.feature {
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.main_services {
+  background-color: #efeef3;
+}
+
+.head-title h1 {
+  font-family: "Muller";
+  font-weight: 500;
+  font-size: 47.92px;
+  line-height: 98%;
+  margin: 0;
+}
+
+.head-title img {
+  width: 35px;
+  height: 35px;
+}
+
+.page-top {
+  align-items: start;
+  width: 100%;
+}
+
+hr {
+  color: #0000002b;
+  background: #0000002b;
+  width: 100%;
+  height: 1px;
+  border: none;
+}
+
+.block-head {
+  width: 100%;
+}
+
+.block-services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  display: flex;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 10px;
+  height: fit-content;
+}
+
+.feature-card__icon {
+  background-color: #efeef3;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.feature-card__title {
+  font-family: "Muller";
+  font-weight: 500;
+  font-size: 26px;
+  line-height: 132%;
+  color: #060606;
+}
+
+.feature-card__description {
+  font-family: "Muller";
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 132%;
+  color: #333333;
+}
+
+.feature-card__button {
+  background-color: #4c47fc;
+  padding: 15px 25px 15px 25px;
+  color: #ffffff;
+  font-size: 19.4px;
+  font-family: "Muller";
+  line-height: 120%;
+  font-weight: 500;
+  border-radius: 43px;
+  border: 0;
+}
+
+.feature-card__button:hover {
+  background-color: #4d47fccc;
+  transition: 400ms background-color;
+}
+
+.feature-card__visual {
+  position: relative;
+}
+
+.feature-card__number {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-weight: 500;
+  font-family: "Muller";
+  padding: 10px;
+  border-radius: 50px;
+  background-color: #ffffff;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-card__bg-image {
+  border-radius: 0 10px 10px 0;
+  height: 100%;
+}
+
+.feature-card__content {
+  padding: 20px;
+}
+
+.faq-section {
+  background-color: #ffffff;
+  padding: 10px 0 40px 0;
+}
+
+.faq__question {
+  font-family: "Muller";
+  font-weight: 500;
+  font-size: 26.42px;
+  line-height: 132%;
+  margin: 0;
+}
+
+.faq__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+}
+
+.faq__item {
+  background-color: #4c47fc;
+  border-radius: 10px;
+  padding: 15px;
+  margin: 15px 0;
+  transition: 400ms;
+}
+
+.faq__answer,
+.faq__link {
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 18.26px;
+  line-height: 132%;
+}
+
+.faq__icons {
+  display: flex;
+  align-items: center;
+}
+
+@media screen and (max-width: 1115px) {
+  .block-services {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
+  }
+  .faq__question {
+    font-size: 23px;
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .feature-card__visual {
+    display: none;
+  }
+  .faq__question {
+    font-size: 18px;
+  }
+  .faq__icon{
+    width: 35px;
+    height: 35px;
+  }
+}

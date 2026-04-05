@@ -1,0 +1,2042 @@
+openapi: 3.0.3
+info:
+  title: ''
+  version: 0.0.0
+paths:
+  /api/schema/:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - en
+          - ru
+      tags:
+      - api
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /auth/currency/:
+    patch:
+      operationId: update_currency
+      summary: Update user currency
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCurrencyUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCurrencyUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserCurrencyUpdate'
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/info/:
+    get:
+      operationId: auth_01_user_info
+      summary: User info
+      tags:
+      - Auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                UserInfoExample:
+                  value:
+                    email: test@mail.ru
+                    language: en
+                    currency: USD
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/language/:
+    patch:
+      operationId: update_language
+      summary: Update user language
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguageUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguageUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedUserLanguageUpdate'
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/logout/:
+    post:
+      operationId: auth_09_logout
+      summary: Logout
+      tags:
+      - Auth
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/reset-password/:
+    post:
+      operationId: auth_08_reset_password
+      summary: Reset password
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+            examples:
+              ResetPassword:
+                value:
+                  email: test@mail.ru
+                summary: Reset Password
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetPassword'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                EmailNotFound:
+                  value:
+                    email:
+                    - User not found.
+                  summary: Email not found
+                  description: Email not found
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/reset-password/confirm/:
+    get:
+      operationId: auth_09_reset_password_confirm_link
+      summary: Reset password confirm - check token
+      parameters:
+      - in: query
+        name: token
+        schema:
+          type: string
+        description: Token for password reset
+        required: true
+      tags:
+      - Auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                ResetPasswordTokenNotFound.:
+                  value:
+                    detail: Reset password token not found.
+                  summary: Reset password token not found.
+                  description: Reset password token not found.
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+    post:
+      operationId: auth_09_reset_password_confirm
+      summary: Reset password confirm
+      parameters:
+      - in: cookie
+        name: token
+        schema:
+          type: string
+        description: Token for password reset
+        required: true
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordConfirm'
+            examples:
+              ResetPasswordConfirm:
+                value:
+                  password: Qwertypassword!
+                  confirm_password: Qwertypassword!
+                summary: Reset Password Confirm
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordConfirm'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                ResetPasswordTokenNotFound.:
+                  value:
+                    detail: Reset password token not found.
+                  summary: Reset password token not found.
+                  description: Reset password token not found.
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/settings/:
+    get:
+      operationId: User settings
+      summary: User settings
+      tags:
+      - Settings
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/settings/sessions/:
+    get:
+      operationId: User sessions
+      tags:
+      - Settings
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserSession'
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/settings/sessions/{session_key}/:
+    delete:
+      operationId: Delete user session
+      parameters:
+      - in: path
+        name: session_key
+        schema:
+          type: string
+        description: Session key for deletion
+        required: true
+      tags:
+      - Settings
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserSession'
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/signin/:
+    post:
+      operationId: auth_05_signin
+      description: |
+        Starts sign-in process.
+
+        On success, server sets HttpOnly cookie `signin_token`.
+        This cookie is required for:
+        - /signin/confirm/
+        - /signin/resend-code/
+      summary: Sign in
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signin'
+            examples:
+              Signin:
+                value:
+                  email: test@mail.ru
+                  password: Qwertypassword!
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Signin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Signin'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                InvalidCredentials:
+                  value:
+                    detail: Invalid credentials.
+                  summary: Invalid credentials
+                  description: Invalid credentials.
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/signin/confirm/:
+    post:
+      operationId: auth_06_signin_confirm
+      description: |-
+        Confirms sign-in using verification code.
+
+        Requires HttpOnly cookie `signin_token` set by /signin/.
+        Cookie is deleted after successful confirmation.
+      summary: Signin confirm
+      parameters:
+      - in: cookie
+        name: signin_token
+        schema:
+          type: string
+        description: Signin token set by /signin/
+        required: true
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SigninConfirm'
+            examples:
+              Signin:
+                value:
+                  code: '123456'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SigninConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SigninConfirm'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                CodeExpiredOrNotFound.:
+                  value:
+                    detail: Code expired or not found.
+                  summary: Code expired or not found.
+                  description: Code expired or not found.
+                InvalidCode.:
+                  value:
+                    detail: Invalid code.
+                  summary: Invalid code.
+                  description: Invalid code.
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/signin/resend-code/:
+    post:
+      operationId: auth_07_signin_resend_code
+      description: |-
+        Resends sign-in verification code.
+
+        Requires HttpOnly cookie `signin_token` set by /signin/.
+      summary: Signin resend code
+      parameters:
+      - in: cookie
+        name: signin_token
+        schema:
+          type: string
+        description: Signin token set by /signin/
+        required: true
+      tags:
+      - Auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                CodeExpiredOrNotFound.:
+                  value:
+                    detail: Code expired or not found.
+                  summary: Code expired or not found.
+                  description: Code expired or not found.
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/signup/:
+    post:
+      operationId: auth_02_signup
+      description: |
+        Starts sign-up process.
+
+        On success, server sets HttpOnly cookie `signup_token`.
+        This cookie is required for:
+        - /signup/confirm/
+        - /signup/resend-code/
+      summary: Sign up
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Signup'
+            examples:
+              Signup:
+                value:
+                  email: test@mail.ru
+                  password: Qwertypassword!
+                  confirm_password: Qwertypassword!
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Signup'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Signup'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                EmailAlreadyUsed:
+                  value:
+                    email:
+                    - Email already used.
+                  summary: Email already used
+                  description: Email already used
+                PasswordsDidn'tMatch:
+                  value:
+                    confirm_password:
+                    - Passwords didn't match.
+                  summary: Passwords didn't match
+                  description: Passwords didn't match
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/signup/confirm/:
+    post:
+      operationId: auth_04_signup_confirm
+      description: |-
+        Confirms sign-up using verification code.
+
+        Requires HttpOnly cookie `signup_token` set by /signup/.
+        Cookie is deleted after successful confirmation.
+      summary: Signup confirm
+      parameters:
+      - in: cookie
+        name: signup_token
+        schema:
+          type: string
+        description: Signup token set by /signup/
+        required: true
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SignupConfirm'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SignupConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SignupConfirm'
+        required: true
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                CodeExpiredOrNotFound.:
+                  value:
+                    detail: Code expired or not found.
+                  summary: Code expired or not found.
+                  description: Code expired or not found.
+                InvalidCode.:
+                  value:
+                    detail: Invalid code.
+                  summary: Invalid code.
+                  description: Invalid code.
+                EmailAlreadyUsed:
+                  value:
+                    email:
+                    - Email already used.
+                  summary: Email already used
+                  description: Email already used
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /auth/signup/resend-code/:
+    post:
+      operationId: auth_03_signup_resend_code
+      description: |-
+        Resends sign-up verification code.
+
+        Requires HttpOnly cookie `signup_token` set by /signup/.
+      summary: Signup resend code
+      parameters:
+      - in: cookie
+        name: signup_token
+        schema:
+          type: string
+        description: Signup token set by /signup/
+        required: true
+      tags:
+      - Auth
+      security:
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthBadRequest'
+              examples:
+                CodeExpiredOrNotFound.:
+                  value:
+                    detail: Code expired or not found.
+                  summary: Code expired or not found.
+                  description: Code expired or not found.
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /finance/providers/crypto/b2bwallet:
+    post:
+      operationId: finance_providers_crypto_b2bwallet_create
+      tags:
+      - finance
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/B2BWalletWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/B2BWalletWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/B2BWalletWebhook'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/B2BWalletWebhook'
+          description: ''
+  /wallets/:
+    get:
+      operationId: Wallet list
+      summary: Wallet list
+      tags:
+      - Wallets
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Wallet'
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /wallets/{coin}/:
+    get:
+      operationId: Coin Wallet
+      summary: Coin Wallet
+      parameters:
+      - in: path
+        name: coin
+        schema:
+          type: string
+        required: true
+      tags:
+      - Wallets
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Wallet'
+          description: Success
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /wallets/deposit/:
+    post:
+      operationId: wallet_01_create_deposit_address
+      description: |-
+        Creates or returns a deposit address for the specified coin.
+
+        The user must be authenticated.
+        If the wallet already has a deposit address, it will be returned.
+        Otherwise, a new address will be generated.
+
+        Deposits may be unavailable for some coins.
+      summary: Create deposit address
+      tags:
+      - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Deposit'
+            examples:
+              DepositRequest:
+                value:
+                  coin: BTC
+                summary: Deposit request
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Deposit'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Deposit'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deposit'
+              examples:
+                DepositResponse:
+                  value:
+                    wallet_id: 42
+                    coin: BTC
+                    deposit_address: bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh
+                    min_deposit: '0.0001'
+                  summary: Deposit response
+          description: Deposit address created or retrieved successfully.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBadRequest'
+              examples:
+                UnsupportedCoin:
+                  value:
+                    coin:
+                    - Unsupported coin.
+                  summary: Unsupported coin
+                  description: Unsupported coin
+                DepositsUnavailable:
+                  value:
+                    coin:
+                    - Deposits are unavailable for this coin.
+                  summary: Deposits unavailable
+                  description: Deposits unavailable
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /wallets/transactions/:
+    get:
+      operationId: wallet_02_list_transactions
+      description: |-
+        Returns a paginated list of user transactions.
+
+        Transactions are ordered by creation date (newest first).
+
+        Supports filtering by:
+        - coin
+        - category
+        - status
+      summary: List transactions
+      parameters:
+      - in: query
+        name: category
+        schema:
+          type: string
+        description: Transaction category
+      - in: query
+        name: coin
+        schema:
+          type: string
+        description: 'Coin code (for example: BTC, ETH, USDT)'
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: 'Page number (default: 1)'
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: 'Number of items per page (default: 20, max: 100)'
+      - in: query
+        name: status
+        schema:
+          type: string
+        description: Transaction status
+      tags:
+      - Wallets
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedTransactionList'
+          description: Paginated list of transactions
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                AuthNotProvided:
+                  value:
+                    detail: Authentication credentials were not provided.
+                  summary: auth not provided
+                  description: Unauthorized
+          description: Unauthorized
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /wallets/withdraw/:
+    post:
+      operationId: wallet_01_withdraw_init
+      description: |-
+        Initiates a withdrawal request.
+
+        On success, server sets HttpOnly cookie `withdraw_token` for confirming withdrawal.
+        This token is required for:
+        - /wallets/withdraw/confirm/
+      summary: Initiate withdrawal
+      tags:
+      - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Withdraw'
+            examples:
+              WithdrawRequest:
+                value:
+                  amount: '0.5'
+                  address: '0x123456789abcdef'
+                  coin: ETH
+                summary: Withdraw request
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Withdraw'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Withdraw'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Success'
+              examples:
+                Success:
+                  value:
+                    success: true
+                  summary: success
+                  description: Success
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBadRequest'
+              examples:
+                UnsupportedCoin:
+                  value:
+                    detail: Coin unavailable.
+                  summary: Unsupported coin
+                  description: Unsupported coin
+                MinWithdrawalAmountLimit:
+                  value:
+                    detail: Min withdrawal amount is 0.0001.
+                  summary: Min withdrawal amount limit
+                  description: Min withdrawal amount limit
+                MaxWithdrawalAmountLimit:
+                  value:
+                    detail: Max withdrawal amount is 0.1.
+                  summary: Max withdrawal amount limit
+                  description: Max withdrawal amount limit
+                InsufficientFunds:
+                  value:
+                    detail: Insufficient funds.
+                  summary: Insufficient funds
+                  description: Insufficient funds
+                WalletNotFound:
+                  value:
+                    detail: Wallet not found.
+                  summary: Wallet not found
+                  description: Wallet not found
+          description: Bad request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+  /wallets/withdraw/confirm/:
+    post:
+      operationId: wallet_02_withdraw_confirm
+      description: |2
+
+        Confirms a withdrawal request using the OTP code sent to the user.
+
+        Requires HttpOnly cookie `withdraw_token` from `/wallets/withdraw/`.
+        On success, the token is deleted and a transaction is created.
+      summary: Confirm withdrawal
+      parameters:
+      - in: cookie
+        name: withdraw_token
+        schema:
+          type: string
+        description: Withdraw token set by /wallets/withdraw/
+        required: true
+      tags:
+      - Wallets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WithdrawConfirm'
+            examples:
+              ConfirmWithdrawal:
+                value:
+                  code: '123456'
+                summary: Confirm withdrawal
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/WithdrawConfirm'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/WithdrawConfirm'
+        required: true
+      security:
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transaction'
+          description: Withdrawal confirmed and transaction created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletBadRequest'
+              examples:
+                OTPNotFoundOrExpired:
+                  value:
+                    detail: OTP not found or expired.
+                  summary: OTP not found or expired
+                  description: The OTP token is missing, expired, or already used
+                InvalidOTPCode:
+                  value:
+                    detail: Invalid OTP.
+                  summary: Invalid OTP code
+                  description: The user entered an incorrect OTP code
+          description: Invalid OTP or withdrawal request
+        '429':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                TooManyRequests:
+                  value:
+                    detail: Too many requests. Try again later.
+                  summary: too many requests
+                  description: Too many requests
+          description: Too many requests
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletError'
+              examples:
+                InternalServerError:
+                  value:
+                    detail: Server error.
+                  summary: internal server error
+                  description: Internal server error
+          description: Internal server error
+components:
+  schemas:
+    AuthBadRequest:
+      type: object
+      properties:
+        field:
+          type: array
+          items:
+            type: string
+      required:
+      - field
+    AuthError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    B2BWalletWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+        category:
+          $ref: '#/components/schemas/B2BWalletWebhookCategoryEnum'
+        coin:
+          type: string
+        amount:
+          type: string
+        commission:
+          type: string
+        full_amount:
+          type: string
+        address:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/B2BWalletWebhookStatusEnum'
+        label:
+          type: string
+          nullable: true
+        tx_id:
+          type: string
+          nullable: true
+        created_at:
+          type: integer
+        explorer_link:
+          type: string
+          format: uri
+      required:
+      - address
+      - amount
+      - category
+      - coin
+      - commission
+      - created_at
+      - explorer_link
+      - full_amount
+      - id
+      - label
+      - status
+      - tx_id
+    B2BWalletWebhookCategoryEnum:
+      enum:
+      - send
+      - receive
+      type: string
+      description: |-
+        * `send` - send
+        * `receive` - receive
+    B2BWalletWebhookStatusEnum:
+      enum:
+      - pending
+      - confirmating
+      - aml_checking
+      - confirmed
+      - frozen
+      - refunded
+      - network_error
+      type: string
+      description: |-
+        * `pending` - pending
+        * `confirmating` - confirmating
+        * `aml_checking` - aml_checking
+        * `confirmed` - confirmed
+        * `frozen` - frozen
+        * `refunded` - refunded
+        * `network_error` - network_error
+    CurrencyEnum:
+      enum:
+      - USD
+      - EUR
+      - RUB
+      type: string
+      description: |-
+        * `USD` - $
+        * `EUR` - €
+        * `RUB` - ₽
+    Deposit:
+      type: object
+      properties:
+        coin:
+          type: string
+      required:
+      - coin
+    LanguageEnum:
+      enum:
+      - ru
+      - en
+      type: string
+      description: |-
+        * `ru` - Русский
+        * `en` - Английский
+    PaginatedTransactionList:
+      type: object
+      required:
+      - count
+      - results
+      properties:
+        count:
+          type: integer
+          example: 123
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=4
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?page=2
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transaction'
+    PatchedUserCurrencyUpdate:
+      type: object
+      properties:
+        currency:
+          $ref: '#/components/schemas/CurrencyEnum'
+    PatchedUserLanguageUpdate:
+      type: object
+      properties:
+        language:
+          $ref: '#/components/schemas/LanguageEnum'
+    ResetPassword:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+      required:
+      - email
+    ResetPasswordConfirm:
+      type: object
+      properties:
+        password:
+          type: string
+          writeOnly: true
+        confirm_password:
+          type: string
+          writeOnly: true
+      required:
+      - confirm_password
+      - password
+    Settings:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Язык
+        kyc_passed:
+          type: boolean
+          readOnly: true
+      required:
+      - email
+      - kyc_passed
+    Signin:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
+    SigninConfirm:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 6
+          minLength: 6
+      required:
+      - code
+    Signup:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+        confirm_password:
+          type: string
+          writeOnly: true
+      required:
+      - confirm_password
+      - email
+      - password
+    SignupConfirm:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 6
+          minLength: 6
+      required:
+      - code
+    Success:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+      - success
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tx_id:
+          type: string
+          nullable: true
+          title: Хэш транзакции
+          maxLength: 255
+        provider_id:
+          type: string
+          nullable: true
+          title: ID провайдера
+          maxLength: 255
+        coin:
+          type: string
+          readOnly: true
+        category:
+          allOf:
+          - $ref: '#/components/schemas/TransactionCategoryEnum'
+          title: Категория
+        address:
+          type: string
+          title: Адрес
+          maxLength: 255
+        amount:
+          type: string
+          readOnly: true
+        commission:
+          type: string
+          readOnly: true
+        internal:
+          type: boolean
+          title: Внутренняя
+        status:
+          allOf:
+          - $ref: '#/components/schemas/TransactionStatusEnum'
+          title: Статус
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+        sent_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: Отправлено
+        confirmed_at:
+          type: string
+          format: date-time
+          nullable: true
+          title: Подтверждено
+      required:
+      - address
+      - amount
+      - category
+      - coin
+      - commission
+      - created_at
+      - id
+    TransactionCategoryEnum:
+      enum:
+      - deposit
+      - withdrawal
+      type: string
+      description: |-
+        * `deposit` - Депозит
+        * `withdrawal` - Вывод
+    TransactionStatusEnum:
+      enum:
+      - pending
+      - confirmating
+      - aml_checking
+      - confirmed
+      - frozen
+      - refunded
+      - network_error
+      type: string
+      description: |-
+        * `pending` - В ожидании
+        * `confirmating` - Подтверждается
+        * `aml_checking` - Проверка AML
+        * `confirmed` - Подтверждено
+        * `frozen` - Заморожено
+        * `refunded` - Возвращено
+        * `network_error` - Ошибка сети
+    User:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          title: Адрес электронной почты
+          maxLength: 254
+        language:
+          allOf:
+          - $ref: '#/components/schemas/LanguageEnum'
+          title: Язык
+        currency:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyEnum'
+          title: Валюта
+      required:
+      - email
+    UserSession:
+      type: object
+      properties:
+        session_key:
+          type: string
+          maxLength: 64
+        device:
+          type: string
+          maxLength: 256
+        ip_address:
+          type: string
+        last_activity:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - device
+      - ip_address
+      - last_activity
+      - session_key
+    Wallet:
+      type: object
+      properties:
+        coin_code:
+          type: string
+          readOnly: true
+        available_balance:
+          type: object
+          properties:
+            original:
+              type: string
+              example: '0.5'
+            converted:
+              type: string
+              example: '30000'
+          readOnly: true
+        frozen_balance:
+          type: object
+          properties:
+            original:
+              type: string
+              example: '0.1'
+            converted:
+              type: string
+              example: '6000'
+          readOnly: true
+        rate:
+          type: number
+          format: double
+          readOnly: true
+        withdrawal_commission:
+          type: string
+          readOnly: true
+        deposit_commission:
+          type: string
+          readOnly: true
+      required:
+      - available_balance
+      - coin_code
+      - deposit_commission
+      - frozen_balance
+      - rate
+      - withdrawal_commission
+    WalletBadRequest:
+      type: object
+      properties:
+        field:
+          type: array
+          items:
+            type: string
+      required:
+      - field
+    WalletError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+      - detail
+    Withdraw:
+      type: object
+      properties:
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,8})?$
+        address:
+          type: string
+          maxLength: 255
+        coin:
+          type: string
+      required:
+      - address
+      - amount
+      - coin
+    WithdrawConfirm:
+      type: object
+      properties:
+        code:
+          type: string
+          maxLength: 6
+          minLength: 6
+      required:
+      - code
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid

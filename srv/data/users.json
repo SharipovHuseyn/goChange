@@ -1,0 +1,151 @@
+[
+    {
+        "id": "123",
+        "email": "user@mail.ru",
+        "pwd": "123",
+        "language": "ru",
+        "currency": "RUB",
+        "wallets": [
+            {
+                "coin_code": "BTC",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "70670.94",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "ETH",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "2079.93",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "USDT-TRC20",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "0.99",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "USDT-ERC20",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "0.99",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "USDT-BEP20",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "0.99",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "LTC",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "57.57",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "TRX",
+                "available_balance": {
+                    "original": "1",
+                    "converted": "0.28"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "0.28",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "BNB",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "690.19",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "XMR",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "354.02",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            },
+            {
+                "coin_code": "BCH",
+                "available_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "frozen_balance": {
+                    "original": "0",
+                    "converted": "0"
+                },
+                "rate": "520.18",
+                "withdrawal_commission": null,
+                "deposit_commission": null
+            }
+        ]
+    }
+]

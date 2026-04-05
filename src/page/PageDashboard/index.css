@@ -1,0 +1,107 @@
+.wallet-done,
+.wallet-wait,
+.wallet-error {
+  border-radius: 5px;
+  padding: 3px 5px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wallet-done {
+  border: 1px solid rgba(0, 255, 0, 0.5);
+}
+
+.wallet-wait {
+  border: 1px solid rgba(255, 255, 0, 0.5);
+}
+
+.wallet-error {
+  border: 1px solid rgba(255, 0, 0, 0.5);
+}
+
+#wallet .blackButton {
+  background-color: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+#wallet .blackButton:hover {
+  border-color: #4096ff;
+  color: #4096ff;
+}
+
+#wallet .blueButton {
+  background-color: #4c47fc;
+  border-color: #4c47fc;
+  color: #fff;
+}
+
+#wallet .blueButton:hover {
+  border-color: #4096ff;
+  color: #fff;
+}
+
+#wallet .wallet-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#wallet .wallet-actions-row {
+  display: flex;
+  gap: 10px;
+}
+
+#wallet .wallet-exchange-btn {
+  width: 100%;
+}
+
+#wallet .ant-table-cell {
+  padding: 8px;
+}
+
+#wallet .failed {
+  color:red;
+  font-size:50px;
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-left:-25px;/* half width*/
+  margin-top:-25px;/* half height*/  
+}
+
+
+@media (max-width: 768px) {
+
+  #wallet .blackButton,
+  #wallet .blueButton {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #wallet .blackButton > span:not(.ant-btn-icon),
+  #wallet .blueButton > span:not(.ant-btn-icon) {
+    display: none;
+  }
+  #wallet .blackButton .ant-btn-icon,
+  #wallet .blueButton .ant-btn-icon {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #wallet .wallet-exchange-btn {
+    width: 36px;
+    height: 36px;
+  }
+}

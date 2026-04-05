@@ -1,0 +1,45 @@
+.pageLogin {
+    height: 100vh;
+    position: relative;
+}
+  
+.pageLogin .vertical-center {
+    width: 100vw;
+    margin: 0;
+    padding: 5px;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    box-sizing: border-box;
+}
+
+.pageLogin .ant-form-item-required::before {
+  display:none!important;
+}
+
+.pageLogin .ant-btn-primary {
+  background-color: #4D48FD;
+}
+.pageLogin .ant-btn-primary:hover {
+  background-color: rgba(77, 72, 253, 0.8)!important;
+}
+.pageLogin .ant-btn-default:hover {
+  color: #4D48FD!important;
+  border-color: #4D48FD!important;
+}
+.login-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.login-header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.login-header p {
+  font-size: 14px;
+  color: #8c8c8c;
+}

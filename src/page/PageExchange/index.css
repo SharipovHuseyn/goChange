@@ -1,0 +1,127 @@
+#exchange .failed {
+  color:red;
+  font-size:50px;
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-left:-25px;/* half width*/
+  margin-top:-25px;/* half height*/  
+}
+
+#exchange .blackButton {
+  background-color:#000;
+  border-color:#000;
+  color:#fff;
+}
+#exchange .blackButton:hover {
+  color:#4096ff;
+}
+
+#exchange .blueButton {
+  background-color:#4c47fc;
+  border-color:#4c47fc;
+  color:#fff;
+}
+#exchange .blueButton:hover {
+  color:#4096ff;
+}
+
+#exchange .inputWithCoin {
+  margin-top:10px; 
+  position:relative; 
+  z-index:1; 
+  display: grid;
+  grid-template-columns: 0.99fr 150px;
+  gap:10px;
+}
+
+#exchange .inputWithCoin-input {
+  font-size:22px;
+  background-color:#F7F7F8;
+  height:48px;
+}
+
+#exchange .inputWithCoin-select {
+  width:165px;
+  height:48px;
+}
+
+#exchange .fromCoin-message-change {
+  font-size:10px;
+  position:absolute;
+  top:10px;
+  left:32px;
+  padding-right: 123px;
+}
+
+#exchange .fromCoin-message-first {
+  font-size:10px;
+  position:absolute;
+  top:31px;
+  left:32px;
+}
+
+#exchange .fromCoin-message-second {
+  font-size:10px;
+  position:absolute;
+  top:56px;
+  left:32px;
+}
+
+#exchange .amountLoader {
+  position:absolute;
+  z-index:2;
+  left:20px;
+  top:25px;
+}
+#exchange .swapContainer {
+  position: relative;
+}
+
+#exchange .swapButton {
+  position: absolute;
+  right: 0px;
+  top: 110px;
+  height: 45px;
+  width: 45px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+
+  #exchange {
+    min-width: unset !important;
+    padding-left: 0 !important;
+  }
+
+  #exchange .inputWithCoin {
+    grid-template-columns: 1fr;
+  }
+
+  #exchange .inputWithCoin-select {
+    width: 100%;
+  }
+
+  #exchange .inputWithCoin-input {
+    font-size: 20px;
+  }
+
+  #exchange .fromCoin-message-change {
+    padding-right: 0;
+  }
+  #exchange .swapButton {
+    position: static;
+    margin: 10px auto;
+    display: flex;
+  }
+  #exchange .ant-table-wrapper {
+    overflow-x: auto;
+  }
+
+}

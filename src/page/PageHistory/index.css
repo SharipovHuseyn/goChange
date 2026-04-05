@@ -1,0 +1,123 @@
+#history .blackButton {
+  background-color: #000;
+  border-color: #000;
+  color: #fff;
+}
+
+#history .blackButton:hover {
+  border-color: #4096ff;
+  color: #4096ff;
+}
+
+#history .blueButton {
+  background-color: #4c47fc;
+  border-color: #4c47fc;
+  color: #fff;
+}
+
+#history .blueButton:hover {
+  border-color: #4096ff;
+  color: #fff;
+}
+#history .wallet-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#history .wallet-actions-wrapper {
+  position: absolute;
+  top: 12px;
+  right: 12px !important;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#history .wallet-actions-row {
+  display: flex;
+  gap: 10px;
+}
+
+#history .wallet-exchange-btn {
+  width: 100%;
+}
+
+#history .ant-table-cell {
+  padding: 4px;
+}
+#history .history-filters {
+  display: grid;
+  grid-template-columns: min-content min-content auto;
+  gap: 10px;
+}
+
+#history .tabledDataFailed {
+  position:relative;
+  z-index: 1;
+  top:-100px;
+  left:50%;
+  transform: translateX(-50%);
+  font-size:30px;
+  color:red;
+}
+
+@media (max-width: 768px) {
+  #history .history-filters {
+    grid-template-columns: 1fr 1fr 2fr;
+    align-items: end;
+  }
+
+  #history .history-filters .ant-select,
+  #history .history-filters .ant-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  #history .wallet-actions-wrapper {
+    position: static;
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  #history .blackButton,
+  #history .blueButton {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #history .blackButton > span:not(.ant-btn-icon),
+  #history .blueButton > span:not(.ant-btn-icon) {
+    display: none;
+  }
+
+  #history .blackButton .ant-btn-icon,
+  #history .blueButton .ant-btn-icon {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #history .wallet-exchange-btn {
+    width: 36px;
+    height: 36px;
+  }
+  #history .ant-table-wrapper {
+    overflow-x: auto;
+  }
+
+  #history .ant-table {
+    min-width: 600px;
+  }
+}

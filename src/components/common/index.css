@@ -1,0 +1,26 @@
+.header__items a.active-link {
+  color: rgba(63, 59, 253, 1);
+  font-weight: 500;
+  position: relative;
+}
+
+.mobile__menu__link.active-link {
+  color: rgba(63, 59, 253, 1);
+  font-weight: 500;
+}
+
+.header__items a {
+  transition: color 0.3s ease;
+}
+
+.header__items a:hover {
+  color: rgba(63, 59, 253, 0.8);
+}
+
+.mobile__menu__link {
+  transition: color 0.3s ease;
+}
+
+.mobile__menu__link:hover {
+  color: rgba(63, 59, 253, 0.8);
+}

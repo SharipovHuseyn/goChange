@@ -1,0 +1,120 @@
+.wallet-modal .ant-modal-content {
+  border-radius: 16px;
+  background: #f5f5f5;
+  color: #fff;
+}
+
+.wallet-modal-title {
+    color: #000;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.wallet-select {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.wallet-input {
+  margin-bottom: 12px;
+}
+
+.wallet-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: 14px;
+  color: #bfbfbf;
+}
+
+.wallet-submit {
+  width: 100%;
+  margin-top: 18px;
+  height: 44px;
+}
+
+.wallet-max {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.wallet-qr-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.wallet-qr {
+  width: 200px;
+  height: 200px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wallet-qr-placeholder {
+  width: 160px;
+  height: 160px;
+  background: repeating-linear-gradient(
+    45deg,
+    #2a2a2a,
+    #2a2a2a 10px,
+    #1e1e1e 10px,
+    #1e1e1e 20px
+  );
+}
+
+.wallet-address {
+      background: #fff;
+    color: #000;
+  border-radius: 12px;
+  padding: 12px;
+  font-size: 13px;
+  word-break: break-all;
+  position: relative;
+}
+
+.wallet-address-actions {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+}
+
+
+.wallet-copy-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #4c47fc;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.wallet-copy-btn:hover {
+  color: #6f6bff;
+}
+
+.wallet-copy-btn:active {
+  color: #4c47fc;
+}
+
+.wallet-modal .failed {
+  color:red;
+  font-size:50px;
+  position:absolute;
+  top:50%;
+  left:50%;
+  margin-left:-25px;/* half width*/
+  margin-top:-25px;/* half height*/  
+}

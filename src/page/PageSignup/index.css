@@ -1,0 +1,92 @@
+.pageSignup {
+    height: 100vh;
+    position: relative;
+}
+  
+.pageSignup .vertical-center {
+    width: 100vw;
+    margin: 0;
+    padding: 5px;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    box-sizing: border-box;
+}
+
+.logo-block{
+  background-color: rgba(51, 51, 51, 1);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 8px;
+}
+
+.pageSignup .ant-form-item-required::before {
+  display:none!important;
+}
+
+.pageSignup .ant-btn-primary {
+  background-color: #4D48FD;
+}
+.pageSignup .ant-btn-primary:hover {
+  background-color: rgba(77, 72, 253, 0.8)!important;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.reg-header {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
+.reg-header h1 {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 16px;
+
+}
+
+.login-header p {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.header-signup{
+  margin: 10px 0 0 10px;
+}
+
+.header-signup a{
+  color: #1677ff;
+  text-decoration: none;
+}
+
+.header-signup a:hover{
+  color: black;
+  transition: color 600ms;
+}
+
+@media (max-width: 768px) {
+  .pageLogin .ant-form,
+  .pageSignup .ant-form {
+    width: 100% !important;
+  }
+
+  .pageLogin .ant-form-item,
+  .pageSignup .ant-form-item {
+    margin-bottom: 12px;
+  }
+
+  .pageLogin .ant-btn,
+  .pageSignup .ant-btn {
+    width: 100%;
+  }
+}
+

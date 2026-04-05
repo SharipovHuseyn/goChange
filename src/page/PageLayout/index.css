@@ -1,0 +1,87 @@
+#layout-page-header-mobile {
+  background: #fff;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #eee;
+}
+
+#sider .ant-menu-light {
+  background: #f5f5f5
+}
+#sider .ant-menu-item {
+  background: #fff
+}
+#sider .ant-menu-item.ant-menu-item-selected {
+  background-color: #4D48FD;
+  color:#fff;
+}
+#sider ul.ant-menu-root {
+  border:0;
+}
+
+
+#sider {
+  background: #f5f5f5;
+  overflow: auto;
+  height: 100vh;
+  position: sticky;
+  inset-inline-start: 0;
+  top: 0;
+  bottom: 0;
+  scrollbar-width: thin;
+  scrollbar-gutter: stable;
+  padding-bottom: 5px;
+}
+
+#sider .user-icon{
+    position:absolute;
+    top:17px;
+    left:9px;
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    background-color:#F3F4F6;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+#sider .user-email {
+  position:relative;
+  top:23px;
+  left:-2px;
+  padding-left:60px; 
+  font-size:18px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow:ellipsis;
+}
+
+#sider .user-data {
+  background-color:#fff;
+  border-radius:5px;
+  position:absolute;
+  top:77px; 
+  left:0;
+  width:245px;
+  height:70px;
+}
+
+#sider .title {
+  position:absolute;
+  width:100%;
+  font-size:22px;
+  border-bottom:1px solid rgba(173, 173, 173, 0.3);
+  padding-bottom:7px;
+}
+
+@media (max-width: 768px) {
+  #sider {
+    display: none;
+  }
+}

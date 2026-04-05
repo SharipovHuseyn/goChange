@@ -1,0 +1,196 @@
+#settings {
+ width: 100%;
+ padding-left: 12px;
+ min-width:320px;
+}
+
+.pageSettingsChangePasswordWnd .ant-btn-primary {
+  background-color: #4D48FD;
+}
+.pageSettingsChangePasswordWnd .ant-btn-primary:hover {
+  background-color: rgba(77, 72, 253, 0.8)!important;
+}
+
+
+.security-title-main {
+  font-size: 22px;
+  font-weight: 400;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(173, 173, 173, 0.3);
+  padding-bottom: 7px;
+}
+.security-row {
+  display: grid;
+  grid-template-columns: 60px minmax(280px, 1fr) 1fr;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid #ededed;
+}
+
+.security-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.security-title {
+  font-weight: 600;
+}
+
+.security-desc {
+  font-size: 14px;
+  color: #8c8c8c;
+  line-height: 1.4;
+}
+
+.security-controls {
+  text-align: right;
+}
+.security-controls > * {
+  display: inline-block;
+}
+.security-controls .security-value {
+  padding-bottom: 10px;
+}
+.security-controls .security-value-btn {
+  margin-left:20px;
+}
+
+.btn-muted,
+.btn-primary {
+  justify-self: end;
+}
+
+.btn-muted {
+  background: #cfcfff;
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  padding: 0 28px;
+  height: 38px;
+}
+
+.btn-muted:hover{
+    background: #cfcfff !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  border: none !important;
+  cursor: auto;
+}
+.btn-muted:active{
+    background: #cfcfff !important;
+  color: #fff !important;
+  border-radius: 999px !important;
+  border: none !important;
+  cursor: auto;
+}
+
+.btn-primary {
+  background: #4c47fc;
+  color: #fff;
+  border-radius: 999px;
+  border: none;
+  padding: 0 28px;
+  height: 38px;
+}
+
+.btn-primary:hover {
+  background: #4c47fce3 !important;
+  color: #fff !important;
+  border-radius: 999px;
+  border: none !important;
+}
+
+.btn-primary:active {
+  background: #4c47fc !important;
+  color: #fff !important;
+  border-radius: 999px;
+  border: none !important;
+}
+
+/* SESSIONS */
+.sessions-block {
+  margin-top: 32px;
+}
+
+.sessions-title {
+    font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.session-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #ededed;
+}
+
+.session-device {
+  font-weight: 500;
+}
+
+.session-meta {
+  font-size: 12px;
+  color: #8c8c8c;
+}
+.security-icon img {
+  width: 50px;
+  height: 50px;
+}
+.logout-btn{
+    color: #f5222d;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+}
+
+.logout-btn:hover{
+    color: #f5222d !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.logout-btn:active{
+    color: #f5222d !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+
+@media (max-width: 768px) {
+  .security-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 16px 0;
+  }
+
+  .security-value {
+    justify-self: start;
+    padding-right: 0;
+  }
+
+  .btn-muted,
+  .btn-primary {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .security-controls {
+    text-align: left;
+  }
+  .security-controls > * {
+    display: block;
+  }  
+  .security-controls .security-value-btn {
+    margin-left:0;
+  }
+
+}

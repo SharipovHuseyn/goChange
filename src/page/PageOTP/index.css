@@ -1,0 +1,39 @@
+#pageOTP {
+    height: 100vh;
+    position: relative;
+    min-width:200px;
+}
+  
+#pageOTP .vertical-center {
+    width: 100vw;
+    margin: 0;
+    padding: 5px;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    box-sizing: border-box;
+}
+
+#pageOTP .ant-form-item-required::before {
+  display:none!important;
+}
+
+#pageOTP .ant-btn-primary {
+  background-color: #4D48FD;
+}
+#pageOTP .ant-btn-primary:hover {
+  background-color: rgba(77, 72, 253, 0.8)!important;
+}
+
+
+@media (max-width: 768px) {
+  #pageOTP input {
+    text-align: center;
+    font-size: 18px;
+  }
+
+  #pageOTP .ant-form {
+    width: 100%;
+  }
+}
